@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui">
+    <ui:define name="title">Login Shift</ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <p:menubar>
+                <p:submenu label="Consultas" >
+                    <p:menuitem value="Pacientes" url="/Telas/consultas/consultaPaciente.xhtml"/>
+                    <p:menuitem value="Exames" url="/Telas/consultas/consultaExame.xhtml"/>
+                    <p:menuitem value="Médicos" url="/Telas/consultas/consultaMedicos.xhtml/"/>
+                    <p:menuitem value="Posto de Coleta" url="/Telas/consultas/consultaPostoColeta.xhtml"/>
+                    <p:menuitem value="Ordem de Serviço" url="/Telas/consultas/consultaOrdemServico.xhtml"/>
+                    <p:menuitem value="Ordem de Serviço Exame" url="/Telas/consultas/consultaOrdemServicoExame.xhtml"/>
+                </p:submenu>
+                <p:submenu label="Gerar" >
+                    <p:menuitem value="Ordem de Serviço" url="/Telas/geracao/geracaoOrdemServico.xhtml"/>
+                    <p:menuitem value="Ordem de Serviço Exame" url="/Telas/geracao/geracaoOrdemServicoExame.xhtml"/>
+                </p:submenu>
+                <p:submenu label="Cadastro" >
+                    <p:menuitem value="Pacientes" disabled="true" />
+                    <p:menuitem value="Exames" disabled="true" />
+                    <p:menuitem value="Médicos" disabled="true" />
+                    <p:menuitem value="Posto de Coleta" disabled="true" />
+                </p:submenu>
+                <p:submenu label="Ajuda" >
+                    <p:menuitem value="Sobre" url="/Telas/ajuda/ajuda.xhtml" />
+                </p:submenu>
+
+            </p:menubar>
+            <div>
+                <br/>
+                <h:panelGrid columns="1">
+                    <p:commandButton id="btnEntrar" process="@this"  value="Entrar" action="#{loginBean.entrarSistema()}" />
+                </h:panelGrid>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

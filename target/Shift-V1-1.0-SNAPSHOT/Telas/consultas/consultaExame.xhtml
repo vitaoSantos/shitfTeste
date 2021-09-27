@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="title">Consulta de Exames</ui:define> 
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panel header="Lista de Exames" style="width: 100%;">
+                <p:fieldset legend="Filtros">
+                    <p:panelGrid id="filtros" styleClass="formulario">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Descrição: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value="#{consultaExameBean.filtro.descricao}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Preço: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputNumber autocomplete="off" value="#{consultaExameBean.filtro.preco}"
+                                               decimalSeparator="," thousandSeparator="." placeholder="Valor R$" symbol="R$"/>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton id="btnFiltrar" process="@this,filtros"
+                                     update="dataTable, pagina" value="Pesquisar"
+                                     style="width: auto"
+                                     action="#{consultaExameBean.listarExames(true)}"/>
+                </p:fieldset>
+            </p:panel>
+            <br/>
+            <p:dataTable sortMode="single" id="dataTable" var="obj" value="#{consultaExameBean.listaExames}"
+                         rowKey="#{idx}" rowIndexVar="idx" style="max-width: 95vw;overflow-x: scroll"
+                         selectionMode="multiple" emptyMessage="Nenhum registro encontrado!" >
+                <p:column headerText="Descrição" >
+                    <h:outputText value="#{obj.descricao}"/>
+                </p:column>
+                <p:column headerText="Preço" >
+                    <h:outputText value="#{obj.preco}" />
+                </p:column>
+            </p:dataTable>
+            <br/>
+            <h:panelGrid id="pagina" columns="5" style="width: 100%; text-align: center" >
+                <h:outputText value="Pagina #{consultaExameBean.paginacao.numeroPagina} de #{consultaExameBean.paginacao.totalPaginas}" />
+                <p:commandLink actionListener="#{consultaExameBean.listarPaginaAnteriorBean()}"
+                               update="pagina,dataTable"
+                               process="@this">
+                    Anterior
+                </p:commandLink>
+                <p:commandLink actionListener="#{consultaExameBean.listarPaginaProximoBean()}"
+                               update="pagina,dataTable" process="@this">
+                    Próxima 
+                </p:commandLink>
+                <p:selectOneMenu id="selectTamanhoPag" value="#{consultaExameBean.paginacao.tamanhoPagina}"
+                                 style="width: 200px" >
+                    <f:selectItem itemLabel="Itens por página 10" itemValue="10" />
+                    <f:selectItem itemLabel="Itens por página 50" itemValue="50" />
+                    <f:selectItem itemLabel="Itens por página 250" itemValue="250" />
+                    <f:selectItem itemLabel="Itens por página 500" itemValue="500" />
+                    <p:ajax event="change" process="@this,selectTamanhoPag" update="dataTable, pagina"
+                            listener="#{consultaExameBean.listarExames(false)}"/>
+                </p:selectOneMenu>
+                <h:panelGrid columns="2" >
+                    <p:outputLabel id="olTotalReg" value="Total de itens #{consultaExameBean.paginacao.totalReg}" />
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+
+

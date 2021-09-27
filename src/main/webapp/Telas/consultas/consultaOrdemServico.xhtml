@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="title">Consulta Ordens de Serviços</ui:define> 
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panel header="Lista de Ordens de Serviços" style="width: 100%;">
+                <p:fieldset legend="Filtros">
+                    <p:panelGrid id="filtros" styleClass="formulario">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Núemro da Ordem de Serviço: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputNumber autocomplete="off" value="#{consultaOrdemServicoBean.filtro.id}"  />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Nome Paciente: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value="#{consultaOrdemServicoBean.filtro.nomePaciente}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Convencio: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value="#{consultaOrdemServicoBean.filtro.convenio}" />
+                            </p:column>
+                            <p:column>
+                                <p:outputLabel value="Nome do Médico: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value="#{consultaOrdemServicoBean.filtro.nomeMedico}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Descrição do Posto de Coleta: "/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText value="#{consultaOrdemServicoBean.filtro.descricaoPostoColeta}" />
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton id="btnFiltrar" process="@this,filtros"
+                                     update="dataTable, pagina" value="Pesquisar"
+                                     style="width: auto"
+                                     action="#{consultaOrdemServicoBean.listarOrdemServicos(true)}"/>
+                </p:fieldset>
+            </p:panel>
+            <br/>
+            <p:dataTable sortMode="single" id="dataTable" var="obj" value="#{consultaOrdemServicoBean.listaOrdemServicos}"
+                         rowKey="#{idx}" rowIndexVar="idx" style="max-width: 95vw;overflow-x: scroll"
+                         selectionMode="multiple" emptyMessage="Nenhum registro encontrado!" >
+                <p:column headerText="Número da O.S." >
+                    <h:outputText value="#{obj.id}"/>
+                </p:column>
+                <p:column headerText="Nome Paciente" >
+                    <h:outputText value="#{obj.paciente.nome}" />
+                </p:column>
+                <p:column headerText="Convenio" >
+                    <h:outputText value="#{obj.convenio}" />
+                </p:column>
+                <p:column headerText="Nome Médico" >
+                    <h:outputText value="#{obj.medico.nome}" />
+                </p:column>
+                <p:column headerText="Posto de Coleta" >
+                    <h:outputText value="#{obj.posto_coleta.descricao}" />
+                </p:column>
+            </p:dataTable>
+            <br/>
+            <h:panelGrid id="pagina" columns="5" style="width: 100%; text-align: center" >
+                <h:outputText value="Pagina #{consultaOrdemServicoBean.paginacao.numeroPagina} de #{consultaOrdemServicoBean.paginacao.totalPaginas}" />
+                <p:commandLink actionListener="#{consultaOrdemServicoBean.listarPaginaAnteriorBean()}"
+                               update="pagina,dataTable"
+                               process="@this">
+                    Anterior
+                </p:commandLink>
+                <p:commandLink actionListener="#{consultaOrdemServicoBean.listarPaginaProximoBean()}"
+                               update="pagina,dataTable" process="@this">
+                    Próxima 
+                </p:commandLink>
+                <p:selectOneMenu id="selectTamanhoPag" value="#{consultaOrdemServicoBean.paginacao.tamanhoPagina}"
+                                 style="width: 200px" >
+                    <f:selectItem itemLabel="Itens por página 10" itemValue="10" />
+                    <f:selectItem itemLabel="Itens por página 50" itemValue="50" />
+                    <f:selectItem itemLabel="Itens por página 250" itemValue="250" />
+                    <f:selectItem itemLabel="Itens por página 500" itemValue="500" />
+                    <p:ajax event="change" process="@this,selectTamanhoPag" update="dataTable, pagina"
+                            listener="#{consultaOrdemServicoBean.listarOrdemServicos(true)}"/>
+                </p:selectOneMenu>
+                <h:panelGrid columns="2" >
+                    <p:outputLabel id="olTotalReg" value="Total de itens #{consultaOrdemServicoBean.paginacao.totalReg}" />
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+
+
